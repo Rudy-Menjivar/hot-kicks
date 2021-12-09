@@ -11,6 +11,10 @@ export default function CreateProduct() {
   return (
     <Form>
       <fieldset>
+        <label htmlFor="image">
+          Image
+          <input type="file" id="image" name="image" onChange={handleChange} />
+        </label>
         <label htmlFor="name">
           Name
           <input
