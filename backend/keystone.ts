@@ -4,6 +4,7 @@ import {
     withItemData,
     statelessSessions,
 } from '@keystone-next/keystone/session';
+import { CartItem } from './schemas/CartItems';
 import { ProductImage } from './schemas/ProductImage';
 import { Product } from './schemas/Product';
 import { User } from './schemas/User';
@@ -59,6 +60,7 @@ export default withAuth(
             User,
             Product,
             ProductImage,
+            CartItem,
         }),
         ui: {
             // TODO: Change this for roles
