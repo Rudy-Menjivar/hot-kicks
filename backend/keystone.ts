@@ -8,6 +8,8 @@ import { ProductImage } from './schemas/ProductImage';
 import { Product } from './schemas/Product';
 import { User } from './schemas/User';
 import 'dotenv/config';
+import { insertSeedData } from './seed-data';
+import { sendPasswordResetEmail } from './lib/mail';
 
 const databaseURL =
     process.env.DATABASE_URL || 'mongodb://localhost/keystone-hot-kicks';
@@ -27,7 +29,8 @@ const { withAuth } = createAuth({
     },
     passwordResetLink: {
         async sendToken(args) {
-            console.log(args);
+            // send reset pwd email
+            await sendPasswordResetEmail(args.token, args.identity);
         },
     },
 });
