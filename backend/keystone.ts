@@ -1,8 +1,8 @@
 import { createAuth } from '@keystone-next/auth';
 import { config, createSchema } from '@keystone-next/keystone/schema';
 import {
-    withItemData,
-    statelessSessions,
+  withItemData,
+  statelessSessions,
 } from '@keystone-next/keystone/session';
 import { CartItem } from './schemas/CartItems';
 import { ProductImage } from './schemas/ProductImage';
@@ -11,66 +11,65 @@ import { User } from './schemas/User';
 import 'dotenv/config';
 import { insertSeedData } from './seed-data';
 import { sendPasswordResetEmail } from './lib/mail';
+import { extendGraphqlSchema } from './mutations';
 
 const databaseURL =
-    process.env.DATABASE_URL || 'mongodb://localhost/keystone-hot-kicks';
+  process.env.DATABASE_URL || 'mongodb://localhost/keystone-hot-kicks';
 
 const sessionConfig = {
-    maxAge: 60 * 60 * 24 * 360, // How long sign in lasts
-    secret: process.env.COOKIE_SECRET,
+  maxAge: 60 * 60 * 24 * 360, // How long sign in lasts
+  secret: process.env.COOKIE_SECRET,
 };
 
 const { withAuth } = createAuth({
-    listKey: 'User',
-    identityField: 'email',
-    secretField: 'password',
-    initFirstItem: {
-        fields: ['name', 'email', 'password'],
-        // TODO: Add initial roles
+  listKey: 'User',
+  identityField: 'email',
+  secretField: 'password',
+  initFirstItem: {
+    fields: ['name', 'email', 'password'],
+    // TODO: Add initial roles
+  },
+  passwordResetLink: {
+    async sendToken(args) {
+      // send reset pwd email
+      await sendPasswordResetEmail(args.token, args.identity);
     },
-    passwordResetLink: {
-        async sendToken(args) {
-            // send reset pwd email
-            await sendPasswordResetEmail(args.token, args.identity);
-        },
-    },
+  },
 });
 
 export default withAuth(
-    config({
-        // @ts-ignore
-        server: {
-            cors: {
-                origin: [process.env.FRONTEND_URL],
-                credentials: true,
-            },
-        },
-        db: {
-            adapter: 'mongoose',
-            url: databaseURL,
-            async onConnect(keystone) {
-                console.log('Connected to Database!');
-                if (process.argv.includes('--seed-data')) {
-                    await insertSeedData(keystone);
-                }
-            },
-        },
-        lists: createSchema({
-            // Schema items go here
-            User,
-            Product,
-            ProductImage,
-            CartItem,
-        }),
-        ui: {
-            // TODO: Change this for roles
-            isAccessAllowed: ({ session }) =>
-                // console.log(session);
-                !!session?.data,
-        },
-        session: withItemData(statelessSessions(sessionConfig), {
-            // GraphQL Query
-            User: 'id name email',
-        }),
-    })
+  config({
+    server: {
+      cors: {
+        origin: [process.env.FRONTEND_URL],
+        credentials: true,
+      },
+    },
+    db: {
+      adapter: 'mongoose',
+      url: databaseURL,
+      async onConnect(keystone) {
+        console.log('Connected to Database!');
+        if (process.argv.includes('--seed-data')) {
+          await insertSeedData(keystone);
+        }
+      },
+    },
+    lists: createSchema({
+      // Schema items go here
+      User,
+      Product,
+      ProductImage,
+      CartItem,
+    }),
+    extendGraphqlSchema,
+    ui: {
+      // TODO: Change this for roles
+      isAccessAllowed: ({ session }) => !!session?.data,
+    },
+    session: withItemData(statelessSessions(sessionConfig), {
+      // GraphQL Query
+      User: 'id name email',
+    }),
+  })
 );
