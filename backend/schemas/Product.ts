@@ -9,6 +9,11 @@ export const Product = list({
     update: rules.canManageProducts,
     delete: rules.canManageProducts,
   },
+  ui: {
+    listView: {
+      initialColumns: ['name', 'status', 'price', 'user'],
+    },
+  },
   fields: {
     name: text({ isRequired: true }),
     description: text({
@@ -31,7 +36,7 @@ export const Product = list({
         { label: 'Available', value: 'AVAILABLE' },
         { label: 'Unavailable', value: 'UNAVAILABLE' },
       ],
-      defaultValue: 'DRAFT',
+      defaultValue: 'AVAILABLE',
       ui: {
         displayMode: 'segmented-control',
         createView: { fieldMode: 'hidden' },
