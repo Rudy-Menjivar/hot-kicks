@@ -52,7 +52,7 @@ describe('<Nav/>', () => {
   });
 
   it('Renders a full nav when signed in', async () => {
-    const { container, debug } = render(
+    const { container } = render(
       <CartStateProvider>
         <MockedProvider mocks={signedInMocks}>
           <Nav />
@@ -61,6 +61,21 @@ describe('<Nav/>', () => {
     );
     // ? Apollo initially renders logged out (no data yet), but renders again after data is fetched
     await screen.findByText('Account');
-    debug();
+    expect(container).toMatchSnapshot();
+    expect(container).toHaveTextContent('Sign Out');
+    expect(container).toHaveTextContent('My Cart');
+  });
+
+  it('Renders the amount of items in the cart', async () => {
+    const { container } = render(
+      <CartStateProvider>
+        <MockedProvider mocks={signedInMocksWithCartItems}>
+          <Nav />
+        </MockedProvider>
+      </CartStateProvider>
+    );
+    await screen.findByText('Account');
+    expect(screen.getByText('3')).toBeInTheDocument();
+    expect(container).toMatchSnapshot();
   });
 });

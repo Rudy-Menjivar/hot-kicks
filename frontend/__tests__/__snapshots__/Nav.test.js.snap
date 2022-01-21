@@ -1,5 +1,105 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<Nav/> Renders a full nav when signed in 1`] = `
+<div>
+  <ul
+    class="NavStyles-sc-l1ci5j-0 EGULs"
+  >
+    <a
+      href="/products"
+    >
+      Products
+    </a>
+    <a
+      href="/sell"
+    >
+      Sell
+    </a>
+    <a
+      href="/orders"
+    >
+      Orders
+    </a>
+    <a
+      href="/account"
+    >
+      Account
+    </a>
+    <button
+      type="button"
+    >
+      Sign Out
+    </button>
+    <button
+      type="button"
+    >
+      My Cart
+      <span
+        class="CartCount__AnimationStyles-sc-1vw3wro-1 fymtr"
+      >
+        <div>
+          <div
+            class="CartCount__Dot-sc-1vw3wro-0 dSWdGs count"
+          >
+            0
+          </div>
+        </div>
+      </span>
+    </button>
+  </ul>
+</div>
+`;
+
+exports[`<Nav/> Renders the amount of items in the cart 1`] = `
+<div>
+  <ul
+    class="NavStyles-sc-l1ci5j-0 EGULs"
+  >
+    <a
+      href="/products"
+    >
+      Products
+    </a>
+    <a
+      href="/sell"
+    >
+      Sell
+    </a>
+    <a
+      href="/orders"
+    >
+      Orders
+    </a>
+    <a
+      href="/account"
+    >
+      Account
+    </a>
+    <button
+      type="button"
+    >
+      Sign Out
+    </button>
+    <button
+      type="button"
+    >
+      My Cart
+      <span
+        class="CartCount__AnimationStyles-sc-1vw3wro-1 fymtr"
+      >
+        <div>
+          <div
+            class="CartCount__Dot-sc-1vw3wro-0 dSWdGs count"
+          >
+            3
+          </div>
+        </div>
+      </span>
+    </button>
+  </ul>
+</div>
+`;
+
 exports[`<Nav/> Renders with a minimal nav when signed out 1`] = `
 <div>
   <ul
