@@ -33,7 +33,30 @@ describe('<Single Product/>', () => {
     );
     // ? Wait for testId to show up before
     await screen.findByTestId('singleProduct');
-    debug();
     expect(container).toMatchSnapshot();
+  });
+
+  it('Errors out when an item is not found', async () => {
+    const mocksError = [
+      {
+        request: {
+          query: SINGLE_ITEM_QUERY,
+          variables: {
+            id: '123',
+          },
+        },
+        result: {
+          errors: [{ message: 'Item not found!!!' }],
+        },
+      },
+    ];
+    const { container, debug } = render(
+      <MockedProvider mocks={mocksError}>
+        <SingleProduct id="123" />
+      </MockedProvider>
+    );
+    await screen.findByTestId('graphql-error');
+    expect(container).toHaveTextContent('Shoot!');
+    expect(container).toHaveTextContent('Item not found!!!');
   });
 });
