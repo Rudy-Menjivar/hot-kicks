@@ -45,10 +45,22 @@ describe('<Nav/>', () => {
     expect(container).toHaveTextContent('Sign In');
     expect(container).toMatchSnapshot();
     const link = screen.getByText('Sign In');
-    screen.debug(link);
     expect(link).toHaveAttribute('href', '/signin');
     const productsLink = screen.getByText('Products');
     expect(productsLink).toBeInTheDocument();
     expect(productsLink).toHaveAttribute('href', '/products');
+  });
+
+  it('Renders a full nav when signed in', async () => {
+    const { container, debug } = render(
+      <CartStateProvider>
+        <MockedProvider mocks={signedInMocks}>
+          <Nav />
+        </MockedProvider>
+      </CartStateProvider>
+    );
+    // ? Apollo initially renders logged out (no data yet), but renders again after data is fetched
+    await screen.findByText('Account');
+    debug();
   });
 });
